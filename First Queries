@@ -1,0 +1,166 @@
+Начнем с базовых запросов, выделю интересные и важные.
+
+1. Составьте SQL-запрос, который выбирает из таблицы products все чаи стоимостью больше 60 рублей и вычисляет для них цену со скидкой 25%.
+Скидку в % менеджер попросил указать в отдельном столбце в формате текста, то есть вот так: «25%» (без кавычек). Столбцы со скидкой и новой ценой назовите соответственно discount и new_price.
+Также необходимо любым известным способом избавиться от «чайного гриба»
+
+SELECT product_id,
+       name,
+       price,
+       '25%' as discount,
+       price * 0.75 as new_price
+FROM   products
+WHERE  name like '%чай%'
+   and price > 60
+   and not name = 'чайный гриб'
+ORDER BY product_id
+
+2. Рассчитайте среднее количество товаров в заказах из таблицы orders, которые пользователи оформляли по выходным дням (суббота и воскресенье) в течение всего времени работы сервиса.
+
+SELECT round(avg(array_length(product_ids, 1)), 2) as avg_order_size
+FROM   orders
+WHERE  date_part('dow', creation_time) in (0, 6)
+
+3. Посчитайте, сколько пользователей никогда не отменяли свой заказ.
+
+SELECT count(distinct user_id) - count(distinct user_id) filter (WHERE action = 'cancel_order') as users_count
+FROM   user_actions
+
+4. Посчитайте, сколько заказов было сделано и сколько было отменено в каждом из месяцев.
+
+SELECT date_trunc('month', time) as month,
+       action,
+       count(order_id) as orders_count
+FROM   user_actions
+GROUP BY date_trunc('month', time), action
+ORDER BY date_trunc('month', time), action
+
+5. Разбейте пользователей из таблицы users на группы по возрасту (возраст по-прежнему измеряем числом полных лет) и посчитайте количество пользователей каждого возраста.
+
+SELECT date_part('year', age(birth_date)) :: integer as age,
+       count(user_id) as users_count
+FROM   users
+GROUP BY age
+ORDER BY age
+
+6. Разбейте заказы из таблицы orders на 3 группы в зависимости от количества товаров, попавших в заказ:
+Малый (от 1 до 3 товаров);
+Средний (от 4 до 6 товаров);
+Большой (7 и более товаров).
+Посчитайте число заказов, попавших в каждую группу. 
+
+SELECT case when array_length(product_ids, 1) < 4 then 'Малый'
+            when array_length(product_ids, 1) > 6 then 'Большой'
+            else 'Средний' end as order_size,
+       count(order_id) as orders_count
+FROM   orders
+GROUP BY order_size
+ORDER BY orders_count
+
+7. Отличается ли средний размер заказа в будние дни и выходные.
+
+SELECT case when date_part('dow', creation_time) in (0, 6) then 'weekend'
+            else 'weekdays' end as week_part,
+       round(avg(array_length(product_ids, 1)), 2) as avg_order_size
+FROM   orders
+GROUP BY week_part
+ORDER BY avg_order_size
+
+8. Для каждого дня недели в таблице user_actions посчитайте:
+Общее количество оформленных заказов.
+Общее количество отменённых заказов.
+Общее количество неотменённых заказов (т.е. доставленных).
+Долю неотменённых заказов в общем числе заказов (success rate).
+Все расчёты проводите за период с 24 августа по 6 сентября 2022 года включительно, чтобы во временной интервал попало равное количество разных дней недели.
+
+SELECT date_part('isodow', time)::integer as weekday_number,
+       to_char(time, 'Dy') as weekday,
+       count(order_id) filter (WHERE action = 'create_order') as created_orders,
+       count(order_id) filter (WHERE action = 'cancel_order') as canceled_orders,
+       count(order_id) filter (WHERE action = 'create_order') - count(order_id) filter (WHERE action = 'cancel_order') as actual_orders,
+       round((count(distinct order_id) - count(order_id) filter (WHERE action = 'cancel_order')):: decimal / (count(distinct order_id)),
+             3) as success_rate
+FROM   user_actions
+WHERE  date_trunc('day', time) < '2022-09-07'
+GROUP BY weekday_number, weekday
+ORDER BY weekday_number
+
+9. Выведите информацию о товарах в таблице products, цена на которые превышает среднюю цену всех товаров на 20 рублей и более. 
+
+with t1 as (SELECT avg(price) as avg
+            FROM   products)
+SELECT *
+FROM   products
+WHERE  price > 20 + (SELECT *
+                     FROM   t1)
+ORDER BY product_id desc
+
+10. Из таблицы user_actions с помощью подзапроса или табличного выражения отберите все заказы, которые не были отменены пользователями.
+
+SELECT order_id
+FROM   user_actions
+WHERE  order_id not in (SELECT order_id
+                        FROM   user_actions
+                        WHERE  action = 'cancel_order')
+ORDER BY order_id 
+
+11. Для каждого заказа, в котором больше 5 товаров, рассчитайте время, затраченное на его доставку. 
+
+SELECT order_id,
+       min(time) as time_accepted,
+       max(time) as time_delivered,
+       (extract(epoch
+FROM   max(time) - min(time))/60)::integer as delivery_time
+FROM   courier_actions
+WHERE  order_id in (SELECT order_id
+                    FROM   orders
+                    WHERE  array_length(product_ids, 1) > 5)
+   and order_id not in (SELECT order_id
+                     FROM   user_actions
+                     WHERE  action = 'cancel_order')
+GROUP BY order_id
+ORDER BY order_id
+
+12. Для каждой даты в таблице user_actions посчитайте количество первых заказов, совершённых пользователями.
+
+with t1 as (SELECT user_id,
+                   date(min(time)) as date
+            FROM   user_actions
+            WHERE  order_id not in (SELECT order_id
+                                    FROM   user_actions
+                                    WHERE  action = 'cancel_order')
+            GROUP BY user_id)
+SELECT date,
+       count(user_id) as first_orders
+FROM   t1
+GROUP BY date
+ORDER BY date
+
+13. Используя функцию unnest, определите 10 самых популярных товаров в таблице orders.
+
+SELECT *
+FROM   (SELECT unnest(product_ids) as product_id,
+               count(*) as times_purchased
+        FROM   orders
+        WHERE  order_id not in (SELECT order_id
+                                FROM   user_actions
+                                WHERE  action = 'cancel_order')
+        GROUP BY product_id
+        ORDER BY times_purchased desc limit 10) as t1
+ORDER BY product_id
+
+14. Из таблицы orders выведите id и содержимое заказов, которые включают хотя бы один из пяти самых дорогих товаров, доступных в нашем сервисе.
+
+with t1 as (SELECT product_id
+            FROM   products
+            ORDER BY price desc limit 5), 
+t2 as (SELECT order_id,
+            product_ids,
+            unnest(product_ids) as product_id
+            FROM   orders)
+SELECT DISTINCT order_id,
+                product_ids
+FROM   t2
+WHERE  product_id in (SELECT *
+                      FROM   t1)
+ORDER BY order_id
