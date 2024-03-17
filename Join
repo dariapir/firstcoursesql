@@ -1,0 +1,157 @@
+Запросы с join
+
+1. Объедините таблицы user_actions и users по ключу user_id. В результат включите две колонки с user_id из обеих таблиц.
+
+SELECT u.user_id as user_id_left,
+       a.user_id as user_id_right,
+       order_id,
+       time,
+       action,
+       sex,
+       birth_date
+FROM   user_actions as a
+    INNER JOIN users as u
+        ON a.user_id = u.user_id
+ORDER BY user_id_left
+
+2. С помощью FULL JOIN объедините по ключу birth_date таблицы users и couriers.
+
+SELECT u.birth_date as users_birth_date,
+       users_count,
+       c.birth_date as couriers_birth_date,
+       couriers_count
+FROM   (SELECT birth_date,
+               count(user_id) as users_count
+        FROM   users
+        WHERE  birth_date is not null
+        GROUP BY birth_date) as u 
+full join (SELECT birth_date,
+            count(courier_id) as couriers_count
+             FROM   couriers
+             WHERE  birth_date is not null
+             GROUP BY birth_date) as c using (birth_date)
+ORDER BY users_birth_date, couriers_birth_date
+
+3.  Сколько в среднем товаров заказывает каждый пользователь? Выведите id пользователя и среднее количество товаров в заказе.
+
+SELECT user_id,
+       round(avg(array_length(product_ids, 1)), 2) as avg_order_size
+FROM   (SELECT user_id,
+               user_actions.order_id,
+               product_ids
+        FROM   user_actions join orders
+                ON user_actions.order_id = orders.order_id
+        WHERE  user_actions.order_id not in (SELECT DISTINCT order_id
+                                             FROM   user_actions
+                                             WHERE  action = 'cancel_order')
+        ORDER BY user_id, order_id) as t1
+GROUP BY user_id 
+
+4. Рассчитайте суммарную стоимость каждого заказа.
+
+SELECT order_id,
+       sum(price) as order_price
+FROM   (SELECT order_id,
+               product_id,
+               price
+        FROM   (SELECT order_id,
+                       unnest(product_ids) as product_id
+                FROM   orders) as t1
+            LEFT JOIN products using(product_id)
+        ORDER BY order_id, product_id) as t2
+GROUP BY order_id limit 1000
+
+5.  Для каждого пользователя рассчитайте следующие показатели:
+общее число заказов — колонку назовите orders_count
+среднее количество товаров в заказе — avg_order_size
+суммарную стоимость всех покупок — sum_order_value
+среднюю стоимость заказа — avg_order_value
+минимальную стоимость заказа — min_order_value
+максимальную стоимость заказа — max_order_value
+
+with t1 as (SELECT order_id,
+                   sum(price) as sum
+            FROM   (SELECT order_id,
+                           unnest(product_ids) as product_id
+                    FROM   orders) as t
+                INNER JOIN products using(product_id)
+            GROUP BY order_id), t2 as (SELECT user_id ,
+                                  user_actions.order_id ,
+                                  product_ids
+                           FROM   user_actions join orders
+                                   ON user_actions.order_id = orders.order_id
+                           WHERE  user_actions.order_id not in (SELECT DISTINCT order_id
+                                                                FROM   user_actions
+                                                                WHERE  action = 'cancel_order'))
+SELECT user_id,
+       count(t2.order_id) as orders_count,
+       round(avg(array_length(product_ids, 1)), 2) as avg_order_size,
+       sum(sum) as sum_order_value,
+       round(avg(sum), 2) as avg_order_value,
+       min(sum) as min_order_value,
+       max(sum) as max_order_value
+FROM   t2
+    INNER JOIN t1
+        ON t2.order_id = t1.order_id
+GROUP BY user_id
+ORDER BY user_id
+
+6. Посчитайте ежедневную выручку сервиса.
+
+SELECT creation_time::DATE as date,
+       sum(price) as revenue
+FROM   (SELECT order_id,
+               creation_time,
+               product_ids,
+               unnest(product_ids) as product_id
+        FROM   orders
+        WHERE  order_id not in (SELECT order_id
+                                FROM   user_actions
+                                WHERE  action = 'cancel_order')) t1
+    LEFT JOIN products 
+    ON t1.product_id = products.product_id
+GROUP BY date 
+
+7. Произведите замену списков с id товаров из таблицы orders на списки с наименованиями товаров.
+
+SELECT order_id,
+       array_agg(name) as product_names
+FROM   (SELECT order_id,
+               product_ids,
+               unnest(product_ids) as product_id
+        FROM   orders) as t1 join products
+        ON t1.product_id = products.product_id
+GROUP BY order_id limit 1000
+
+8. Выясните, какие пары товаров покупают вместе чаще всего.
+
+SELECT CASE WHEN name1 < name THEN ARRAY[name1, name]
+ELSE ARRAY[name, name1]
+END AS pair, count_pair
+FROM
+(select product_id1, name1, product_id2, name, COUNT(order_id) AS count_pair
+from (select DISTINCT t1.order_id, name AS name1, product_id1, product_id2  
+from
+    (select order_id, unnest(product_ids) as product_id1
+    from orders
+    WHERE order_id NOT IN
+(SELECT
+order_id FROM user_actions
+WHERE action = 'cancel_order')) t1
+    inner join
+    (select order_id, unnest(product_ids) as product_id2
+    from orders
+    WHERE order_id NOT IN
+(SELECT
+order_id FROM user_actions
+WHERE action = 'cancel_order')
+    ) t2 on t1.order_id = t2.order_id
+    and product_id1 < product_id2
+    LEFT JOIN products
+ON product_id1 = products.product_id
+ORDER BY product_id1, product_id2, t1.order_id    
+) t3
+LEFT JOIN products
+ON t3.product_id2 = products.product_id
+GROUP BY product_id1, product_id2, product_id, name1) AS t4
+ORDER BY count_pair DESC, pair
