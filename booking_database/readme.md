@@ -3,10 +3,15 @@
 Всем доброго времени суток! Выполнив тестовое задание для компании, разрабатывающих платформы для отелей, я решила познакомиться с приложением Power Bi.
 Написала несложные запросы, чтобы просто разобраться в функционале.
 
-Но создание таблиц и view также прикрепляю!
+[Получился дашборд](https://github.com/dariapir/sql/blob/main/booking_database/firstpowerbi.pdf)
 
-Индексами я не пользовалась, т.к. на момент решения не сталкивалась с ними.
-Таблицу booking заполнить на 500 тысяч строк к сожалению не получилось, время выполнения запроса было слишком большим
+Запросы, написанные мною для этой работы:
+[Создание таблиц](https://github.com/dariapir/sql/blob/main/booking_database/tables),
+[Запись данных](https://github.com/dariapir/sql/blob/main/booking_database/Insert),
+[Views](https://github.com/dariapir/sql/blob/main/booking_database/views),
+[Запросы для Power Bi](https://github.com/dariapir/sql/blob/main/booking_database/queries%20for%20power%20bi).
+
+## Задания:
 
 ### 1.	Заполнить таблицы данными.
 #### [dbo].[booking] 
