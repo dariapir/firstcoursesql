@@ -1,13 +1,13 @@
 # Изучение основ SQL и построение дашбордов
 
 Изучение SQL началось с онлайн-курса.
-[Таблицы можно посмотреть здесь](https://github.com/dariapir/firstcoursesql/blob/main/tables.png)
+[Таблицы можно посмотреть здесь](https://github.com/dariapir/firstcoursesql/blob/main/firstcoursesql/tables.png)
 
 Прикрепляю запросы, написанные мною:
-[Самые первые и простые запросы](https://github.com/dariapir/firstcoursesql/blob/main/First%20Queries),
-[join](https://github.com/dariapir/firstcoursesql/blob/main/Join),
-[оконные функции](https://github.com/dariapir/firstcoursesql/blob/main/Window),
-[метрики](https://github.com/dariapir/firstcoursesql/blob/main/Product%20metrics).
+[Самые первые и простые запросы](https://github.com/dariapir/firstcoursesql/blob/main/firstcoursesql/First%20Queries),
+[join](https://github.com/dariapir/firstcoursesql/blob/main/firstcoursesql/Join),
+[оконные функции](https://github.com/dariapir/firstcoursesql/blob/main/firstcoursesql/Window),
+[метрики](https://github.com/dariapir/firstcoursesql/blob/main/firstcoursesql/Product%20metrics).
 
 Также составила дашборд, по которому можно делать какие-либо выводы и предпринимать решения:
 
