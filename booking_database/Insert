@@ -1,0 +1,419 @@
+Учитывая необходимую структуру, заполнение таблицы booking будет последним.
+
+-- Заполняем данными country
+INSERT country VALUES (1, 'Russia'); 
+INSERT country VALUES (2, 'Thailand'); 
+INSERT country VALUES (3, 'Taiwan'); 
+INSERT country VALUES (4, 'Singapore'); 
+INSERT country VALUES (5, 'Serbia'); 
+INSERT country VALUES (6, 'Portugal'); 
+INSERT country VALUES (7, 'Poland');
+INSERT country VALUES (8, 'Morocco'); 
+INSERT country VALUES (9, 'Monaco');
+INSERT country VALUES (10, 'Mali');
+INSERT country VALUES (11, 'Latvia');
+INSERT country VALUES (12, 'Japan');
+INSERT country VALUES (13, 'Italy'); 
+INSERT country VALUES (14, 'Indonesia'); 
+INSERT country VALUES (15, 'Greece'); 
+INSERT country VALUES (16, 'France');
+INSERT country VALUES (17, 'Egypt');
+INSERT country VALUES (18, 'Cuba');
+INSERT country VALUES (19, 'China');
+INSERT country VALUES (20, 'Canada');
+
+Хотелось записать реальные города, но вручную делать очень долго. 
+Для автоматизации процесса воспользовалась нейросетью, которая прописала и сами города, и привела в нужный вид с цифрами и скобками.
+-- Заполняем данными city
+INSERT into city VALUES
+(1, 'New York'),
+(2, 'London'),
+(3, 'Tokyo'),
+(4, 'Paris'),
+(5, 'Berlin'),
+(6, 'Sydney'),
+(7, 'Los Angeles'),
+(8, 'Moscow'),
+(9, 'Beijing'),
+(10, 'Toronto'),
+(11, 'Madrid'),
+(12, 'Rome'),
+(13, 'Istanbul'),
+(14, 'Mumbai'),
+(15, 'Buenos Aires'),
+(16, 'Cairo'),
+(17, 'Seoul'),
+(18, 'Dubai'),
+(19, 'Rio de Janeiro'),
+(20, 'Amsterdam'),
+(21, 'Bangkok'),
+(22, 'Cape Town'),
+(23, 'Vancouver'),
+(24, 'Stockholm'),
+(25, 'Singapore'),
+(26, 'Hong Kong'),
+(27, 'Dublin'),
+(28, 'Vienna'),
+(29, 'Zurich'),
+(30, 'Prague'),
+(31, 'Warsaw'),
+(32, 'Auckland'),
+(33, 'Helsinki'),
+(34, 'Oslo'),
+(35, 'Copenhagen'),
+(36, 'Budapest'),
+(37, 'Athens'),
+(38, 'Kuala Lumpur'),
+(39, 'Jakarta'),
+(40, 'Manila'),
+(41, 'Lima'),
+(42, 'Bogotá'),
+(43, 'Santiago'),
+(44, 'Nairobi'),
+(45, 'New Delhi'),
+(46, 'Mexico City'),
+(47, 'Brasília'),
+(48, 'Caracas'),
+(49, 'Quito'),
+(50, 'Riyadh'),
+(51, 'Amman'),
+(52, 'Casablanca'),
+(53, 'Addis Ababa'),
+(54, 'Tehran'),
+(55, 'Nairobi'),
+(56, 'Marrakech'),
+(57, 'Kiev'),
+(58, 'Munich'),
+(59, 'Barcelona'),
+(60, 'Montreal'),
+(61, 'Dallas'),
+(62, 'Miami'),
+(63, 'Seattle'),
+(64, 'Chicago'),
+(65, 'San Francisco'),
+(66, 'Boston'),
+(67, 'Atlanta'),
+(68, 'Phoenix'),
+(69, 'Denver'),
+(70, 'Houston'),
+(71, 'Philadelphia'),
+(72, 'Washington, D.C.'),
+(73, 'Orlando'),
+(74, 'San Diego'),
+(75, 'Las Vegas'),
+(76, 'Austin'),
+(77, 'Nashville'),
+(78, 'Toronto'),
+(79, 'Vancouver'),
+(80, 'Montreal'),
+(81, 'Sydney'),
+(82, 'Melbourne'),
+(83, 'Brisbane'),
+(84, 'Adelaide'),
+(85, 'Perth'),
+(86, 'Auckland'),
+(87, 'Wellington'),
+(88, 'Christchurch'),
+(89, 'Queenstown'),
+(90, 'Dunedin'),
+(91, 'Oslo'),
+(92, 'Copenhagen'),
+(93, 'Stockholm'),
+(94, 'Helsinki'),
+(95, 'Reykjavik'),
+(96, 'Zurich'),
+(97, 'Geneva'),
+(98, 'Bern'),
+(99, 'Lucerne'),
+(100, 'Interlaken'),
+(101, 'Munich'),
+(102, 'Berlin'),
+(103, 'Hamburg'),
+(104, 'Frankfurt'),
+(105, 'Stuttgart'),
+(106, 'Cologne'),
+(107, 'Dusseldorf'),
+(108, 'Nuremberg'),
+(109, 'Athens'),
+(110, 'Thessaloniki'),
+(111, 'Santorini'),
+(112, 'Mykonos'),
+(113, 'Crete'),
+(114, 'Rhodes'),
+(115, 'Istanbul'),
+(116, 'Ankara'),
+(117, 'Izmir'),
+(118, 'Antalya'),
+(119, 'Cappadocia'),
+(120, 'Bodrum'),
+(121, 'Tokyo'),
+(122, 'Kyoto'),
+(123, 'Osaka'),
+(124, 'Hiroshima'),
+(125, 'Fukuoka'),
+(126, 'Sapporo'),
+(127, 'Nagoya'),
+(128, 'Nara'),
+(129, 'Kobe'),
+(130, 'Delhi'),
+(131, 'Mumbai'),
+(132, 'Bangalore'),
+(133, 'Chennai'),
+(134, 'Hyderabad'),
+(135, 'Kolkata'),
+(136, 'Pune'),
+(137, 'Jaipur'),
+(138, 'Ahmedabad'),
+(139, 'Kochi'),
+(140, 'Cairo'),
+(141, 'Alexandria'),
+(142, 'Luxor'),
+(143, 'Aswan'),
+(144, 'Sharm El Sheikh'),
+(145, 'Giza'),
+(146, 'Seoul'),
+(147, 'Busan'),
+(148, 'Incheon'),
+(149, 'Daegu'),
+(150, 'Ulsan'),
+(151, 'Daejeon'),
+(152, 'Jeju'),
+(153, 'Dubai'),
+(154, 'Abu Dhabi'),
+(155, 'Sharjah'),
+(156, 'Ajman'),
+(157, 'Fujairah'),
+(158, 'Ras Al Khaimah'),
+(159, 'Al Ain'),
+(160, 'Rio de Janeiro'),
+(161, 'Sao Paulo'),
+(162, 'Salvador'),
+(163, 'Recife'),
+(164, 'Brasilia'),
+(165, 'Belo Horizonte'),
+(166, 'Fortaleza'),
+(167, 'Manaus'),
+(168, 'Curitiba'),
+(169, 'Porto Alegre'),
+(170, 'Sydney'),
+(171, 'Melbourne'),
+(172, 'Brisbane'),
+(173, 'Perth'),
+(174, 'Adelaide'),
+(175, 'Gold Coast'),
+(176, 'Canberra'),
+(177, 'Hobart'),
+(178, 'Darwin'),
+(179, 'Auckland'),
+(180, 'Wellington'),
+(181, 'Christchurch'),
+(182, 'Queenstown'),
+(183, 'Dunedin'),
+(184, 'Oslo'),
+(185, 'Bergen'),
+(186, 'Stavanger'),
+(187, 'Trondheim'),
+(188, 'Tromso'),
+(189, 'Copenhagen'),
+(190, 'Aarhus'),
+(191, 'Odense'),
+(192, 'Aalborg'),
+(193, 'Stockholm'),
+(194, 'Gothenburg'),
+(195, 'Malmo'),
+(196, 'Uppsala'),
+(197, 'Helsinki'),
+(198, 'Tampere'),
+(199, 'Espoo'),
+(200, 'Vantaa'),
+(201, 'Reykjavik'),
+(202, 'Zurich'),
+(203, 'Geneva'),
+(204, 'Basel'),
+(205, 'Bern'),
+(206, 'Lausanne'),
+(207, 'Lucerne'),
+(208, 'Interlaken'),
+(209, 'Munich'),
+(210, 'Berlin'),
+(211, 'Hamburg'),
+(212, 'Frankfurt'),
+(213, 'Stuttgart'),
+(214, 'Cologne'),
+(215, 'Dusseldorf'),
+(216, 'Nuremberg'),
+(217, 'Athens'),
+(218, 'Thessaloniki'),
+(219, 'Santorini'),
+(220, 'Mykonos'),
+(221, 'Crete'),
+(222, 'Rhodes'),
+(223, 'Istanbul'),
+(224, 'Ankara'),
+(225, 'Izmir'),
+(226, 'Antalya'),
+(227, 'Cappadocia'),
+(228, 'Bodrum'),
+(229, 'Tokyo'),
+(230, 'Kyoto'),
+(231, 'Osaka'),
+(232, 'Hiroshima'),
+(233, 'Fukuoka'),
+(234, 'Sapporo'),
+(235, 'Nagoya'),
+(236, 'Nara'),
+(237, 'Kobe'),
+(238, 'Delhi'),
+(239, 'Mumbai'),
+(240, 'Bangalore'),
+(241, 'Chennai'),
+(242, 'Hyderabad'),
+(243, 'Kolkata'),
+(244, 'Pune'),
+(245, 'Jaipur'),
+(246, 'Ahmedabad'),
+(247, 'Kochi'),
+(248, 'Cairo'),
+(249, 'Alexandria'),
+(250, 'Luxor'),
+(251, 'Aswan'),
+(252, 'Sharm El Sheikh'),
+(253, 'Giza'),
+(254, 'Seoul'),
+(255, 'Busan'),
+(256, 'Incheon'),
+(257, 'Daegu'),
+(258, 'Ulsan'),
+(259, 'Daejeon'),
+(260, 'Jeju'),
+(261, 'Dubai'),
+(262, 'Abu Dhabi'),
+(263, 'Sharjah'),
+(264, 'Ajman'),
+(265, 'Fujairah'),
+(266, 'Ras Al Khaimah'),
+(267, 'Al Ain'),
+(268, 'Rio de Janeiro'),
+(269, 'Sao Paulo'),
+(270, 'Salvador'),
+(271, 'Recife'),
+(272, 'Brasilia'),
+(273, 'Belo Horizonte'),
+(274, 'Fortaleza'),
+(275, 'Manaus'),
+(276, 'Curitiba'),
+(277, 'Porto Alegre'),
+(278, 'Sydney'),
+(279, 'Melbourne'),
+(280, 'Brisbane'),
+(281, 'Perth'),
+(282, 'Adelaide'),
+(283, 'Gold Coast'),
+(284, 'Canberra'),
+(285, 'Hobart'),
+(286, 'Darwin'),
+(287, 'Auckland'),
+(288, 'Wellington'),
+(289, 'Christchurch'),
+(290, 'Queenstown'),
+(291, 'Dunedin'),
+(292, 'Oslo'),
+(293, 'Bergen'),
+(294, 'Stavanger'),
+(295, 'Trondheim'),
+(296, 'Moscow'),
+(297, 'Kazan'),
+(298, 'Tula'),
+(299, 'Sochi'),
+(300, 'Yoshkar-Ola')
+
+-- Заполняем данными source
+INSERT INTO source VALUES
+(1, 'BS-CHANNEL_MANAGER'),
+(2, 'Avito'),
+(3, 'Booking'),
+(4, 'Ostrovok'),
+(5, 'Airbnb'),
+(6, 'Cian'),
+(7, 'Sutochno'),
+(8, 'Web-site'),
+(9, 'Tvil'),
+(10, 'Phone')
+
+-- Заполняем данными provider
+DECLARE @Counter INT = 1;
+WHILE @Counter <= 10000
+BEGIN
+    INSERT INTO provider (id_provider, id_country, id_city, provider_name)
+    VALUES (
+        @Counter,
+        FLOOR(RAND() * (SELECT COUNT(*) FROM country) + 1),
+        FLOOR(RAND() * (SELECT COUNT(*) FROM city) + 1),
+        CONCAT('Provider_', @Counter)
+    );
+
+    SET @Counter = @Counter + 1;
+END;
+
+-- Заполняем данными currency_rate
+DECLARE @DStart DATE = '01.01.2018';
+DECLARE @DEnd DATE = '01.03.2018';
+DECLARE @Number INT = 1;
+WHILE @DStart <= @DEnd 
+BEGIN
+	WHILE @Number <= 4
+    BEGIN
+    	IF @Number = 5
+      		BREAK;
+		INSERT INTO currency_rate (id_currency,date,rate)
+    	VALUES (
+		(SELECT CHOOSE ( @Number, 'EUR', 'USD', 'KRW', 'MXN') ),
+    	@DStart,
+    	(SELECT (RAND()*(120))+50)
+    	);
+      	SET @Number = @Number + 1;
+     END
+     SET @Number = 1;
+     	SET @DStart = DATEADD(DAY, 1, @DStart)
+END    
+
+-- Заполняем данными booking 
+declare @DStart date = '01.01.2018'
+declare @DEnd date = '01.03.2018'
+DECLARE @Counter INT = 1;
+DECLARE @creation_date date;
+DECLARE @providerId INT;
+DECLARE @sourceId INT;
+DECLARE @INDEX INT;
+DECLARE @sourceName nvarchar(3);
+WHILE @Counter <= 500000
+BEGIN
+	SET @creation_date = dateadd (day, 
+               rand(checksum(newid()))*(1+datediff(day, @DStart, @DEnd)), 
+               @DStart); 
+    SET @providerId = FLOOR(RAND() * (SELECT COUNT(*) FROM provider) + 1);
+    SET @sourceId = FLOOR(RAND() * (SELECT COUNT(*) FROM source) + 1);
+	SET @INDEX = RAND()*(4)+1;
+    IF @sourceId = 1 
+    BEGIN
+    	SET @sourceName = CASE WHEN RAND() > 0.5 THEN 'BGC' ELSE 'BS-CHANNEL_MANAGER’ ' END;
+    END    
+    ELSE
+    BEGIN
+    	SET @sourceName = ''
+    END  
+    INSERT INTO booking 
+    VALUES (
+	@Counter,
+    @providerId,   
+	@creation_date,
+    (select DATEADD(DAY, (RAND()*(80))+1, @creation_date)),  
+	(SELECT FLOOR(RAND()*(3))+1),
+    (SELECT FLOOR(RAND()*(30))+1),
+    (SELECT FLOOR(RAND()*(1000))+10),
+    (SELECT CHOOSE(@INDEX, 'EUR', 'USD', 'KRW', 'MXN') ),
+    @sourceId,   
+ 	@sourceName
+      );
+    SET @Counter = @Counter + 1;
+END;
