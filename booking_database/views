@@ -1,0 +1,78 @@
+-- Создаем view1
+CREATE VIEW [dbo].[view1] AS
+SELECT
+    booking.id_provider,
+    provider.provider_name,
+    country.country_name,
+    city.city_name,
+    booking.creation_date,
+    booking.start_date,
+    booking.nights,
+    booking.price,
+    booking.id_currency,
+    booking.price * currency_rate.rate as sum_rub
+FROM
+    booking
+    INNER JOIN provider ON (booking.id_provider = provider.id_provider)
+    INNER JOIN country ON (provider.id_country = country.id_country)
+    INNER JOIN city ON (provider.id_city = city.id_city)
+    OUTER APPLY (
+        SELECT TOP 1 rate
+        FROM currency_rate
+        WHERE currency_rate.id_currency = booking.id_currency
+          AND currency_rate.[date] = booking.creation_date
+        ORDER BY currency_rate.[date] DESC
+    ) currency_rate;
+
+
+-- Создаем view2
+CREATE VIEW [dbo].[view2] AS
+SELECT
+    booking.id_provider,
+    provider.provider_name,
+    country.country_name,
+    city.city_name,
+    YEAR(booking.creation_date) AS creation_year,
+    MONTH(booking.creation_date) AS creation_month,
+    COUNT(*) OVER (PARTITION BY booking.id_provider) AS total_bookings,
+    SUM(CASE WHEN booking.creator != '' THEN 1 ELSE 0 END) OVER (PARTITION BY booking.id_provider) * 100 / 
+    COUNT(*) OVER (PARTITION BY booking.id_provider) as channel,
+    SUM(CASE WHEN booking.creator = 'BGC' THEN 1 ELSE 0 END) OVER (PARTITION BY booking.id_provider) * 100 / 
+    COUNT(*) OVER (PARTITION BY booking.id_provider) as channelBGC
+FROM
+    booking
+    INNER JOIN provider ON (booking.id_provider = provider.id_provider)
+    INNER JOIN country ON (provider.id_country = country.id_country)
+    INNER JOIN city ON (provider.id_city = city.id_city);
+
+
+-- Создаем view3
+CREATE VIEW [dbo].[view3] AS
+SELECT
+    booking.id_provider,
+    provider.provider_name,
+    country.country_name,
+    city.city_name,
+    YEAR(booking.creation_date) AS creation_year,
+    MONTH(booking.creation_date) AS creation_month,
+    COUNT(*) AS bookings_count,
+    AVG(booking.price) AS average_booking_price
+FROM
+    booking 
+    INNER JOIN provider ON (booking.id_provider = provider.id_provider)
+    INNER JOIN country ON (provider.id_country = country.id_country)
+    INNER JOIN city ON (provider.id_city = city.id_city)
+WHERE
+    booking.id_provider IN (
+        SELECT booking.id_provider
+        FROM booking 
+        GROUP BY booking.id_provider
+        HAVING COUNT(DISTINCT MONTH(booking.creation_date)) = 3
+    )
+GROUP BY
+    booking.id_provider,
+    provider.provider_name,
+    country.country_name,
+    city.city_name,
+    YEAR(booking.creation_date),
+    MONTH(booking.creation_date)
