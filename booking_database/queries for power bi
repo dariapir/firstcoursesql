@@ -1,0 +1,21 @@
+-- Рассчитаем кол-во бронирований по странам
+SELECT DISTINCT country_name, COUNT(*) OVER (PARTITION BY country_name) AS count_booking
+  FROM view3
+
+-- Рассчитаем среднюю стоимость бронирования в валюте бронирования по месяцам
+SELECT DISTINCT creation_month, ROUND(AVG(average_booking_price) OVER (PARTITION BY creation_month),2) AS avg_price
+  FROM view3
+
+-- Рассчитаем среднюю стоимость бронирований по странам, среднюю стоимость бронирования и отклонение от нее.
+SELECT DISTINCT country_name, AVG(average_booking_price) OVER (PARTITION BY country_name) AS avg_price_country,
+AVG(average_booking_price) OVER () AS avg_price, 
+100 * AVG(average_booking_price) OVER (PARTITION BY country_name) / AVG(average_booking_price) OVER () - 100 AS deviation_from_average
+FROM view3
+
+-- Расчитаем среднее кол-во ночей по странам, среднюю стоимость бронирования в валюте бронирования в общем/по странам и 
+среднюю стоимость бронирования в рублях в общем/по странам
+SELECT DISTINCT country_name, 
+ROUND(SUM(nights) OVER (PARTITION BY country_name) / CAST(COUNT(*) OVER (PARTITION BY country_name) AS float),2) AS avg_nights_coutry,
+AVG(sum_rub) OVER() AS avg_price_rub, AVG(sum_rub) OVER (PARTITION BY country_name) AS avg_price_rub_country,
+AVG(price) OVER() AS avg_price, AVG(price) OVER (PARTITION BY country_name) AS avg_price_country
+  FROM [dbo].[view1]
