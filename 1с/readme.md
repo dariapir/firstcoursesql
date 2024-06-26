@@ -8,7 +8,7 @@
 В документах Бронирование и Заезд гостей осуществляется проверка, и если номер свободен - документ проводится. 
 Также оформлен красивый отчет, который показывает статус номеров.
 
-Посмотреть текст курсовой, ход работы [здесь](https://github.com/dariapir/projects/blob/main/firstcoursesql/Join),
+Посмотреть текст курсовой, ход работы [здесь](https://github.com/dariapir/projects/blob/main/1с/Текст%20курсовой/Курсовая%20для%20git.docx).
 ![Alt text](pictures/РегистрСведений.png?raw=true "Title")
 ![Alt text](pictures/ОтчетСтатусНомеров.png?raw=true "Title")
 ![Alt text](pictures/РейтингПродажНоменклатура.png?raw=true "Title")
