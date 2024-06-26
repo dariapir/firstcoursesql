@@ -9,3 +9,6 @@
 Также оформлен красивый отчет, который показывает статус номеров.
 ![Alt text](pictures/РегистрСведений.png?raw=true "Title")
 ![Alt text](pictures/ОтчетСтатусНомеров.png?raw=true "Title")
+![Alt text](pictures/РейтингПродажНоменклатура.png?raw=true "Title")
+![Alt text](pictures/РейтингПродажСотрудники.png?raw=true "Title")
+![Alt text](pictures/ОборотноСальдоваяВедомость.png?raw=true "Title")
